@@ -24,11 +24,10 @@
   "homepage": "https://github.com/koenpunt/superagent-use.git",
   "devDependencies": {
     "mocha": "~2.4.5",
-    "should": "~8.2.2"
+    "should": "~8.2.2",
+    "superagent": "~2.2.0"
   },
   "dependencies": {
-    "methods": "~1.1.2",
-    "object-assign": "~4.0.1",
-    "superagent": "~1.0"
+    "methods": "~1.1.2"
   }
 }
