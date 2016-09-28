@@ -1,41 +1,47 @@
 var should = require('should');
+var superagent = require('superagent');
 
 describe('superagent-use', function() {
-  var superagent;
+  var agent;
+
   var prefix = 'http://example.com';
-  var prefixMiddleware = function(request) {
-    if(request.url[0] === '/') {
-      request.url = prefix + request.url;
+  var prefixMiddleware = function(req) {
+    if(req.url[0] === '/') {
+      req.url = prefix + req.url;
     }
-    return request;
+    return req;
   };
 
   beforeEach(function() {
-    /* superagent-use modifies the superagent object, so we need to remove
-       the `require` cache in order to get a new instance for each test. */
-    delete require.cache[require.resolve('superagent')];
-    superagent = require('superagent');
-    require('..')(superagent);
+    agent = require('..')(superagent);
   });
 
   it('should apply plugin to all requests', function() {
-    superagent
+    agent
       .use(prefixMiddleware);
 
-    var req1 = superagent.get('/');
+    var req1 = agent.get('/');
     req1.request()._headers.host.should.equal('example.com');
 
-    var req2 = superagent.patch('/update');
+    var req2 = agent.patch('/update');
     req2.request()._headers.host.should.equal('example.com');
   });
 
   it('should be chainable', function() {
-    var req = superagent
+    var req = agent
       .use(prefixMiddleware)
       .get('/');
 
     req.request()._headers.host.should.equal('example.com');
-
   });
 
+  it('should return a new instance of superagent', function() {
+     var withPrefix = require('..')(superagent);
+         withoutPrefix = require('..')(superagent);
+
+     withPrefix.use(prefixMiddleware);
+
+     withPrefix.get('/').request()._headers.host.should.equal('example.com');
+     withoutPrefix.get('/').request()._headers.host.should.not.equal('example.com');
+   });
 });

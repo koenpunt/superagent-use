@@ -1,6 +1,6 @@
 # superagent-use
 
-Global plugin support for [SuperAgent](https://github.com/visionmedia/superagent/);
+Global plugin support for [SuperAgent](https://github.com/visionmedia/superagent/).
 
 ## Summary
 
@@ -9,16 +9,13 @@ Instead of manually calling `use()` for every request, `use()` is called automat
 ## Example
 
 ```js
+/* The superagent-use module returns a clone of the superagent provided with the new functionality. */
+var agent = require('superagent-use')(require('superagent'));
+var prefix = require('superagent-prefix'); /* A sample superagent plugin/middleware. */
 
-var superagent = require('superagent');
-/* Pass the superagent object to superagent-use
-   in order to be provided with new `use` functionality */
-require('superagent-use')(superagent);
-var prefix = require('superagent-prefix')('https://api.example.com');
+agent.use(prefix('https://api.example.com'));
 
-superagent.use(prefix);
-
-superagent
+agent
   .post('/auth')
   .send({user: 'foo', pass: 'bar123'})
   .on('request', function(req) {
@@ -27,3 +24,4 @@ superagent
   .end(function(err, res) {
     //
   });
+```
