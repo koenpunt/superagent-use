@@ -1,4 +1,4 @@
-# superagent-use
+# superagent-use [![Build Status](https://travis-ci.org/koenpunt/superagent-use.svg?branch=master)](https://travis-ci.org/koenpunt/superagent-use)
 
 Global plugin support for [SuperAgent](https://github.com/visionmedia/superagent/).
 
@@ -11,7 +11,8 @@ Instead of manually calling `use()` for every request, `use()` is called automat
 ```js
 /* The superagent-use module returns a clone of the superagent provided with the new functionality. */
 var agent = require('superagent-use')(require('superagent'));
-var prefix = require('superagent-prefix'); /* A sample superagent plugin/middleware. */
+/* A sample superagent plugin/middleware. */
+var prefix = require('superagent-prefix');
 
 agent.use(prefix('https://api.example.com'));
 
