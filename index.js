@@ -17,10 +17,16 @@ module.exports = function(_superagent) {
   }
   methods.forEach(function(method) {
     superagent[method] = function() {
-      var request = _superagent[method].apply(superagent, arguments);
+      var args = [].slice.call(arguments), cb;
+      if (typeof args[args.length-1] === 'function') {
+        cb = args[args.length-1];
+        args = args.slice(0, -1);
+      }
+      var request = _superagent[method].apply(superagent, args);
       uses.forEach(function(use) {
         request = request.use(use);
       })
+      if (cb) request.end(cb)
       return request;
     };
   });
