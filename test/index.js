@@ -44,4 +44,14 @@ describe('superagent-use', function() {
      withPrefix.get('/').request()._headers.host.should.equal('example.com');
      withoutPrefix.get('/').request()._headers.host.should.not.equal('example.com');
    });
+
+  it('should work with method(...args, cb)', function(done) {
+    var agent = require('..')(superagent)
+      .use(req => (req.end = fn => fn(null, 'foo'), req));
+
+    agent.get('bar', function(err, res) {
+      res.should.equal('foo');
+      done();
+    });
+  });
 });
